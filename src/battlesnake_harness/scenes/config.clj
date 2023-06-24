@@ -1,5 +1,7 @@
 (ns battlesnake-harness.scenes.config
-  (:require [quil.core :as q]
+  (:require [clojure.spec.alpha :as s]
+            [cheshire.core :as json]
+            [quil.core :as q]
             [quip.sprite :as qpsprite]
             [quip.sprites.button :as qpbutton]
             [quip.scene :as qpscene]
@@ -10,6 +12,26 @@
 (defn on-click-menu
   [state e]
   (qpscene/transition state :menu :transition-length 30))
+
+(defn on-click-test
+  [{:keys [host port] :as state} e]
+  (let [resp (json/parse-string (slurp (str "http://" host ":" port)) keyword)
+        valid? (s/valid? :battlesnake/get-response resp)]
+    (if valid?
+      (do
+        (newline)
+        (prn "Valid response!")
+        (newline)
+        (clojure.pprint/pprint resp)
+        (newline))
+      (do
+        (newline)
+        (prn "Invalid response:")
+        (newline)
+        (clojure.pprint/pprint resp)
+        (newline)
+        (prn (s/explain :battlesnake/get-response resp)))))
+  state)
 
 (defn sprites
   "The initial list of sprites for this scene"
@@ -24,14 +46,20 @@
                      [(* (q/width) 0.6) 300]
                      "snake port"
                      :port
-                     "80"
+                     "8080"
                      "Enter new snake port number:")
    (qpbutton/button-sprite "Menu"
-                           [(* 0.5 (q/width))
+                           [(* 0.35 (q/width))
                             (* 0.8 (q/height))]
                            :color common/grey
                            :content-color common/white
-                           :on-click on-click-menu)])
+                           :on-click on-click-menu)
+   (qpbutton/button-sprite "Test"
+                           [(* 0.65 (q/width))
+                            (* 0.8 (q/height))]
+                           :color common/grey
+                           :content-color common/white
+                           :on-click on-click-test)])
 
 (defn draw-config
   "Called each frame, draws the current scene to the screen"

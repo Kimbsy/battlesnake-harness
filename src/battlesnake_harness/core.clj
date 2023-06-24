@@ -10,7 +10,7 @@
   "The initial state of the game"
   []
   {:host "localhost"
-   :port "80"})
+   :port "8080"})
 
 (defn init-scenes
   "Map of scenes in the game"
