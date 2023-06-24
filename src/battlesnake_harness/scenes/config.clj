@@ -71,7 +71,6 @@
   [{:keys [current-scene] :as state} e]
   (let [sprites (get-in state [:scenes current-scene :sprites])
         buttons (filter #(#{:button :config-option} (:sprite-group %)) sprites)]
-    (prn (map :sprite-group buttons))
     (reduce (fn [acc b]
               (if (:collision-detection-fn b)
                 ((classic-rf e) acc b)

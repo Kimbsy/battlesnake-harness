@@ -33,7 +33,7 @@
 (defn draw-menu
   "Called each frame, draws the current scene to the screen"
   [state]
-  (qpu/background dark-green)
+  (qpu/background common/dark-green)
   (qpsprite/draw-scene-sprites state))
 
 (defn update-menu

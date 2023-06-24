@@ -33,7 +33,7 @@
 (defn draw-config-option
   [{:keys [text-child button-child] :as o}]
   (qpsprite/draw-text-sprite text-child)
-  (button/draw-button-sprite button-child))
+  (qpbutton/draw-button-sprite button-child))
 
 (defn config-option
   [id pos description value-key initial-value edit-message]
